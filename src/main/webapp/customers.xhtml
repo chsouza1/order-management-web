@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Customers</title>
+</h:head>
+<h:body>
+
+<h:form id="formCustomers">
+
+    <h2>Customers</h2>
+
+    <p:messages autoUpdate="true"/>
+
+    <p:dataTable value="#{customerBean.customers}" var="c"
+                 paginator="true" rows="10" style="margin-bottom:20px">
+
+        <p:column headerText="ID">
+            <h:outputText value="#{c.id}"/>
+        </p:column>
+
+        <p:column headerText="Name">
+            <h:outputText value="#{c.name}"/>
+        </p:column>
+
+        <p:column headerText="Email">
+            <h:outputText value="#{c.email}"/>
+        </p:column>
+
+        <p:column headerText="Phone">
+            <h:outputText value="#{c.phone}"/>
+        </p:column>
+
+        <p:column headerText="Actions">
+            <p:commandButton value="Edit"
+                             actionListener="#{customerBean.edit(c)}"
+                             update=":formCustomers:customerDialog"
+                             oncomplete="PF('dlgCustomer').show()"/>
+        </p:column>
+
+    </p:dataTable>
+
+    <p:commandButton value="New Customer"
+                     process="@this"
+                     update="customerDialog"
+                     oncomplete="PF('dlgCustomer').show()"
+                     actionListener="#{customerBean.setSelected(null)}"/>
+
+    <p:dialog header="Customer" widgetVar="dlgCustomer" modal="true"
+              resizable="false" id="customerDialog">
+        <h:panelGrid columns="2" cellpadding="5">
+
+            <h:outputLabel for="name" value="Name:"/>
+            <p:inputText id="name" value="#{customerBean.selected.name}" required="true"/>
+
+            <h:outputLabel for="email" value="Email:"/>
+            <p:inputText id="email" value="#{customerBean.selected.email}" required="true"/>
+
+            <h:outputLabel for="phone" value="Phone:"/>
+            <p:inputText id="phone" value="#{customerBean.selected.phone}"/>
+        </h:panelGrid>
+
+        <f:facet name="footer">
+            <p:commandButton value="Save" actionListener="#{customerBean.save}"
+                             update="@form" oncomplete="PF('dlgCustomer').hide()"/>
+        </f:facet>
+    </p:dialog>
+
+</h:form>
+
+</h:body>
+</html>
